@@ -1,0 +1,72 @@
+@baseUrl = http://localhost:4000
+
+### Health
+GET {{baseUrl}}/api/health
+
+### Register
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Alex Student",
+  "email": "alex@example.com",
+  "password": "a-long-password"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alex@example.com",
+  "password": "a-long-password"
+}
+
+### List items without a token (expect 401)
+GET {{baseUrl}}/api/items
+
+### Create with an invalid enum (expect 400)
+POST {{baseUrl}}/api/items
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Test item with invalid status",
+  "status": "missing"
+}
+
+### Create a valid item (expect 201)
+# @name createItem
+POST {{baseUrl}}/api/items
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "title": "Blue backpack",
+  "status": "lost",
+  "reward": 25
+}
+
+### Get one item
+GET {{baseUrl}}/api/items/{{createItem.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Patch the item
+PATCH {{baseUrl}}/api/items/{{createItem.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "status": "found"
+}
+
+### Delete the item (expect 204)
+# @name deleteItem
+DELETE {{baseUrl}}/api/items/{{createItem.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Get the deleted item again (expect 404)
+GET {{baseUrl}}/api/items/{{createItem.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
