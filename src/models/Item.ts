@@ -8,6 +8,12 @@ const itemSchema = new Schema<ItemDoc>({
     enum: { values: ["lost", "found", "claimed"], message: "Status must be lost, found, or claimed" },
     default: "lost",
   },
+  locationCode: {
+    type: String,
+    required: [true, "Location is required"],
+    uppercase: true,
+    trim: true,
+  },
   reward: {
     type: Number,
     min: [0, "Reward must be at least 0"],
