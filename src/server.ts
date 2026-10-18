@@ -12,4 +12,4 @@ connectDB().catch((err: unknown) => {
   console.error("Could not connect to MongoDB:", err);
 });
 
-app.listen(PORT, () => console.log(`API on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`API listening on port ${PORT}`));
