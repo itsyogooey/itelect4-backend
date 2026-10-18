@@ -1,4 +1,5 @@
-@baseUrl = http://localhost:4000
+# For local testing, change baseUrl to the local API on port 4000.
+@baseUrl = https://itelect4-backend-peach.vercel.app
 
 ### Health
 GET {{baseUrl}}/api/health
