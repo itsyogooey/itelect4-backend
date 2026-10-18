@@ -1,14 +1,26 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import type { ErrorRequestHandler } from "express";
 import { authRouter } from "./routes/auth.js";
 import { itemRouter } from "./routes/items.js";
+import { courseRouter } from "./routes/courses.js";
+import { connectDB } from "./config/db.js";
 
 export const app = express();
 
-app.use(cors());
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter((origin) => origin !== "");
+
+app.use(cors({ origin: ALLOWED_ORIGINS }));
 app.use(express.json());
+app.use(async (_req, _res, next) => {
+  await connectDB();
+  next();
+});
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, db: mongoose.connection.readyState === 1 });
@@ -16,6 +28,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/items", itemRouter);
+app.use("/api/courses", courseRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: `No route for ${req.method} ${req.originalUrl}` });
@@ -40,3 +53,5 @@ const errorHandler: ErrorRequestHandler = (err: unknown, _req, res, _next) => {
 };
 
 app.use(errorHandler);
+
+export default app;
