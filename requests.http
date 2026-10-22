@@ -71,3 +71,23 @@ Authorization: Bearer {{login.response.body.$.token}}
 ### Get the deleted item again (expect 404)
 GET {{baseUrl}}/api/items/{{createItem.response.body.$.id}}
 Authorization: Bearer {{login.response.body.$.token}}
+
+### GT5: AI draft without a token (expect 401)
+POST {{baseUrl}}/api/ai
+Content-Type: application/json
+
+{ "prompt": "found a blue umbrella in the library this morning" }
+
+### GT5: AI draft with a too-short prompt (expect 400)
+POST {{baseUrl}}/api/ai
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{ "prompt": "too short" }
+
+### GT5: AI draft (expect 200 with title, summary, category, clarity, tips)
+POST {{baseUrl}}/api/ai
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{ "prompt": "lost my black wallet w/ cherry keychain near MB 3rd flr yesterday around 3pm" }
