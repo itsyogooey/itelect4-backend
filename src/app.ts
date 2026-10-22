@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 import { authRouter } from "./routes/auth.js";
 import { itemRouter } from "./routes/items.js";
 import { locationRouter } from "./routes/locations.js";
+import { aiRouter } from "./routes/ai.js";
 
 export const app = express();
 
@@ -34,6 +35,10 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/locations", locationRouter);
 app.use("/api/items", itemRouter);
+
+// ===== GT5: one more router, mounted like the others =====
+// Private, rate limited, and the only route that talks to Gemini.
+app.use("/api/ai", aiRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: `No route for ${req.method} ${req.originalUrl}` });
