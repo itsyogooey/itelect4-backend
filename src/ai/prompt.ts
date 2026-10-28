@@ -2,10 +2,11 @@
 // ===== no GT4 version -- nothing to compare it to =====================
 import type { ItemDraft } from "../schemas/itemDraft.js";
 
-// An alias, not a version. Google points it at the current Flash model,
-// so a model being retired does not break this app mid-semester. The
-// cost: the same prompt may answer a little differently next month.
-export const MODEL = "gemini-flash-latest";
+// An alias, not a version. Google points it at the current Flash-Lite
+// model: the fastest Gemini tier, which answers in a few seconds instead
+// of thinking at length first. A retired model cannot break this app; the
+// cost is that the same prompt may answer a little differently next month.
+export const MODEL = "gemini-flash-lite-latest";
 
 // The system prompt: the instructions that apply to EVERY request, sent
 // separately from what the student typed.
